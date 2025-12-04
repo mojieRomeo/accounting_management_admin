@@ -58,9 +58,12 @@ const tableData = [{
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="id" label="id" width="100" />
-      <el-table-column prop="事项" label="事项" width="" />
-      <el-table-column prop="金额" label="金额" width="" />
-      <el-table-column prop="入账出账时间" label="入账出账时间" width="" />
+      <el-table-column prop="userId" label="用户id" width="100" />
+      <el-table-column prop="title" label="事项" width="" />
+      <el-table-column prop="type" label="类型（1=入账，2=出账）" width="100" />
+      <el-table-column prop="amount" label="金额" width="" />
+      <el-table-column prop="createTime" label="创建时间" width="" />
+      <el-table-column prop="updataTime" label="更新时间" width="" />
     </el-table>
   </div>
   <div class="page">
