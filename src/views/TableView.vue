@@ -68,7 +68,7 @@ const tableData = [{
   </div>
   <div class="page">
     <span>
-      共{{}}页
+      共100页
     </span>
     <el-pagination background layout="prev, pager, next" :total="1000" />
   </div>
