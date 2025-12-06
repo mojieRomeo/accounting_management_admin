@@ -11,11 +11,11 @@ const props = { value: 'id', label: 'role', disabled: 'unable' }
 
 const options = [
   {
-    id: 1,
+    id: 0,
     role: '用户',
   },
   {
-    id: 2,
+    id: 1,
     role: '管理员',
   },
 ]
@@ -23,9 +23,11 @@ const options = [
 const register = async () => {
   if(!username || !password) {
     alert('请输入用户名和密码')
+    return
   }
-  if(!radio.value){
+  if(radio.value === undefined){
     alert('请选择角色')
+    return
 }
 
   const res = await registerApi({
