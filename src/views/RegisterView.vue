@@ -21,7 +21,7 @@ const options = [
 ]
 
 const register = async () => {
-  if(!username || !password) {
+  if(username.value === '' || password.value === '') {
     alert('请输入用户名和密码')
     return
   }
