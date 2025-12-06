@@ -11,11 +11,11 @@ const props = { value: 'id', label: 'role', disabled: 'unable' }
 
 const options = [
   {
-    id: 0,
+    id: 1,
     role: '用户',
   },
   {
-    id: 1,
+    id: 2,
     role: '管理员',
   },
 ]
