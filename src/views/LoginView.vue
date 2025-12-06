@@ -13,6 +13,7 @@ const login = async () => {
     "password": password.value
   })
   if(res.status === 200){
+    localStorage.setItem('token', res.token)
     router.push("/home")
   }else{
     alert(res.msg)

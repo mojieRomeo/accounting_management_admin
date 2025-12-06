@@ -12,6 +12,7 @@ const routes = [
     {
         path: '/home',
         component: HomeView,
+        meta:{requiresAuth:true},
         children: [{
             path: 'table', component: TableView
         },
@@ -25,4 +26,13 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(), routes
 })
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token')
+    if (to.meta.requiresAuth && !token) {
+        next('/login')
+    }
+    next()
+})
+
+
 export default router

@@ -15,7 +15,7 @@ const register = async () => {
     username: username.value,
     password: password.value
   })
-  if(res.success){
+  if(res.status === 200){
     router.push('/login')
   }else{
     alert(res.message)
