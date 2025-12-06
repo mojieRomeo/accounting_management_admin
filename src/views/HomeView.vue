@@ -9,12 +9,36 @@
 
     <!-- 主体区域 -->
     <div class="body">
-      <aside class="sideBar">
-        <ul>
-          <li @click="goToEcharts">金额可视图</li>
-          <li @click="goToTable">金额管理</li>
-        </ul>
-      </aside>
+      <el-scrollbar height="100vh">
+        <aside class="sideBar">
+          <ul>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+            <li @click="goToEcharts">金额可视图</li>
+            <li @click="goToTable">金额管理</li>
+          </ul>
+        </aside>
+      </el-scrollbar>
       <div class="main">
         <router-view/>
       </div>
@@ -90,5 +114,6 @@ li{
   flex: 1;       /* 让.main 自动撑满剩余宽度 */
   min-width: 0;  /* 防止flex子元素无法拉满 */
 }
+
 
 </style>

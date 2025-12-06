@@ -6,19 +6,37 @@ import {registerApi} from "@/api/registerApi";
 const username = ref('')
 const password = ref('')
 const router = useRouter()
+const radio = ref()
+const props = { value: 'id', label: 'role', disabled: 'unable' }
+
+const options = [
+  {
+    id: 0,
+    role: '用户',
+  },
+  {
+    id: 1,
+    role: '管理员',
+  },
+]
 
 const register = async () => {
   if(!username || !password) {
     alert('请输入用户名和密码')
   }
+  if(!radio.value){
+    alert('请选择角色')
+}
+
   const res = await registerApi({
     username: username.value,
-    password: password.value
+    password: password.value,
+    role: radio.value
   })
   if(res.status === 200){
     router.push('/login')
   }else{
-    alert(res.message)
+    alert(res.msg)
   }
 }
 
@@ -34,6 +52,7 @@ const goToLogin = () => {
   <h2>注册</h2>
   <input v-model="username" placeholder="用户名">
   <input v-model="password" placeholder="密码">
+  <el-radio-group v-model="radio" :options="options" :props="props" />
   <button @click="register">注册</button>
   <p @click="goToLogin">已有账号，去登录</p>
 </div>
