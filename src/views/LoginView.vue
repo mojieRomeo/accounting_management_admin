@@ -13,7 +13,12 @@ const login = async () => {
     "password": password.value
   })
   if(res.status === 200){
-    localStorage.setItem('token', res.token)
+    //postman里返回的resp就是responseEntity，也就是loginApi的返回的res.data（又被封装成了res），所以获取是res.data.username
+    localStorage.setItem('tokenName', res.data.tokenName)
+    localStorage.setItem('tokenValue', res.data.tokenValue)
+    localStorage.setItem('role', res.data.role)
+    localStorage.setItem('username', res.data.username)
+    localStorage.setItem('id',res.data.id)
     router.push("/home")
   }else{
     alert(res.msg)

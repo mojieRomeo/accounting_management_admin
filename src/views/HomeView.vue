@@ -3,7 +3,7 @@
     <!-- 顶栏 -->
     <header class="top">
       <h2 class="title">工作室记账系统</h2>
-      <h2 class="context">欢迎您，XXX</h2>
+      <h2 class="context">欢迎您{{username}}</h2>
       <button @click="logout">退出登录</button>
     </header>
 
@@ -48,8 +48,19 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import {ref} from 'vue'
 const router = useRouter()
-const logout = () => router.push('/login')
+
+const username = ref(localStorage.getItem('username'))
+
+const logout = () =>{
+  localStorage.removeItem('tokenName')
+  localStorage.removeItem('tokenValue')
+  localStorage.removeItem('username')
+  localStorage.removeItem('role')
+  localStorage.removeItem('id')
+  router.push('/login')
+}
 
 const goToEcharts = () => router.push('/home/echarts')
 const goToTable = () => router.push('/home/table')
