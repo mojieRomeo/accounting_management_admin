@@ -18,6 +18,10 @@ const options = [
     id: 1,
     role: '管理员',
   },
+  {
+    id: 2,
+    role: '超级管理员',
+  }
 ]
 
 const register = async () => {

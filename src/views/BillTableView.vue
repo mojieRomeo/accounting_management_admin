@@ -63,7 +63,7 @@ const tableData = [{
       <el-table-column prop="type" label="类型（1=入账，2=出账）" width="100" />
       <el-table-column prop="amount" label="金额" width="" />
       <el-table-column prop="createTime" label="创建时间" width="" />
-      <el-table-column prop="updataTime" label="更新时间" width="" />
+      <el-table-column prop="updateTime" label="更新时间" width="" />
     </el-table>
   </div>
   <div class="page">

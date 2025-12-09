@@ -13,29 +13,29 @@
         <aside class="sideBar">
           <ul>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
             <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
-            <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
-            <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
-            <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
-            <li @click="goToEcharts">金额可视图</li>
-            <li @click="goToTable">金额管理</li>
+            <li @click="goToBillTable">金额管理</li>
+            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户管理</li>
           </ul>
         </aside>
       </el-scrollbar>
@@ -52,6 +52,7 @@ import {ref} from 'vue'
 const router = useRouter()
 
 const username = ref(localStorage.getItem('username'))
+const role = ref<number | null>(localStorage.getItem('role') ? Number(localStorage.getItem('role')) : null)
 
 const logout = () =>{
   localStorage.removeItem('tokenName')
@@ -63,7 +64,9 @@ const logout = () =>{
 }
 
 const goToEcharts = () => router.push('/home/echarts')
-const goToTable = () => router.push('/home/table')
+const goToBillTable = () => router.push('/home/billTable')
+
+const goToUserTable = () => router.push('/home/userTable')
 </script>
 
 <style scoped>
