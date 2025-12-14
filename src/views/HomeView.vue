@@ -52,7 +52,7 @@ import {ref} from 'vue'
 const router = useRouter()
 
 const username = ref(localStorage.getItem('username'))
-const role = ref<number | null>(localStorage.getItem('role') ? Number(localStorage.getItem('role')) : null)
+const role = Number(localStorage.getItem('role'))
 
 const logout = () =>{
   localStorage.removeItem('tokenName')

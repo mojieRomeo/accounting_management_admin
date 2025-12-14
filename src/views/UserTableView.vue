@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {adminPageApi} from "@/api/adminPageApi";
+import {addUserApi} from "@/api/addUserApi";
 
 const tableData = ref([
 
@@ -8,6 +9,25 @@ const tableData = ref([
 const current = ref(1)
 const size = ref(10)
 const total = ref(0)
+const dialogFormVisible = ref(false)
+const form = ref({
+  username: '',
+  password: '',
+})
+const radio = ref()
+const props = { value: 'id', label: 'role', disabled: 'unable' }
+const options = [
+  {
+    id:0,
+    role:'用户',
+  },
+  {
+    id:1,
+    role:'管理员',
+  }
+]
+
+
 
 const adminPage = async () => {
   const res = await adminPageApi({
@@ -20,11 +40,38 @@ const adminPage = async () => {
     size.value = res.data.size
 }
 
+const openDialog = () => {
+  dialogFormVisible.value = true
+  resetForm()
+}
+
+const resetForm = () => {
+  form.value.username = ''
+  form.value.password = ''
+  radio.value = ''
+}
+
+const addUser = async () => {
+  const res = await addUserApi({
+    username:form.value.username,
+    password:form.value.password,
+    role:radio.value
+  })
+  if (res.status === 200) {
+    alert('添加成功')
+  }else {
+    alert('添加失败')
+  }
+  dialogFormVisible.value = false
+}
+
+//翻页
 const pageChange = (val: number) => {
   current.value = val
   adminPage()
 }
 
+//钩子方法，等所有组件全部挂载完毕后执行
 onMounted(() => {
   adminPage()
 })
@@ -41,7 +88,11 @@ onMounted(() => {
     />
     <button>
       查找
-    </button></div>
+    </button>
+    <button @click="openDialog">
+      新增
+    </button>
+  </div>
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="id" label="id" width="100" />
@@ -62,6 +113,31 @@ onMounted(() => {
                    :current-page="current"
                    @current-change="pageChange"/>
   </div>
+  <el-dialog v-model="dialogFormVisible" width="500">
+    <div class="dialog">
+      <el-form :model="form" label-width="80" class="form">
+        <el-form-item label="用户名：">
+          <el-input v-model="form.username" autocomplete="off" />
+        </el-form-item>
+
+        <el-form-item label="密码：">
+          <el-input v-model="form.password" autocomplete="off" />
+        </el-form-item>
+
+        <el-form-item label="角色：">
+          <el-radio-group v-model="radio" :options="options" :props="props"/>
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <div class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取消</el-button>
+      <el-button @click="addUser">
+        确定
+      </el-button>
+    </div>
+  </el-dialog>
+
 </template>
 
 <style scoped>
@@ -101,4 +177,23 @@ span{
   color: #666;
   margin-left:85px;
 }
+.dialog{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.form{
+  width: 300px; /* 表单宽度固定，让内容居中更稳定 */
+  margin: 0 auto;
+}
+
+.dialog-footer{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 20px; /* 按钮之间的间距 */
+}
+
 </style>
