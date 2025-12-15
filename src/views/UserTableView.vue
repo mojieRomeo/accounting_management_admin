@@ -2,6 +2,7 @@
 import {onMounted, ref} from 'vue'
 import {adminPageApi} from "@/api/adminPageApi";
 import {addUserApi} from "@/api/addUserApi";
+import {updateUserApi} from "@/api/updateUserApi";
 
 const tableData = ref([
 
@@ -11,6 +12,7 @@ const size = ref(10)
 const total = ref(0)
 const dialogFormVisible = ref(false)
 const form = ref({
+  id: null as number | null,
   username: '',
   password: '',
 })
@@ -28,7 +30,7 @@ const options = [
 ]
 
 
-
+const currentRole = Number(localStorage.getItem('role'))
 const adminPage = async () => {
   const res = await adminPageApi({
         current: current.value,
@@ -46,21 +48,44 @@ const openDialog = () => {
 }
 
 const resetForm = () => {
+  form.value.id = null
   form.value.username = ''
   form.value.password = ''
   radio.value = ''
 }
 
-const addUser = async () => {
-  const res = await addUserApi({
-    username:form.value.username,
-    password:form.value.password,
-    role:radio.value
-  })
-  if (res.status === 200) {
-    alert('添加成功')
-  }else {
-    alert('添加失败')
+const updateUser = (row: any) => {
+  dialogFormVisible.value = true
+  form.value.id = row.id
+  form.value.username = row.username
+  form.value.password = ''//前段不回显密码
+  radio.value = row.role
+}
+
+const changeUser = async () => {
+  if(form.value.id === null){
+    const res = await addUserApi({
+      username:form.value.username,
+      password:form.value.password,
+      role:radio.value
+    })
+    if (res.status === 200) {
+      alert('添加成功')
+    }else {
+      alert('添加失败')
+    }
+  }else{
+    const res = await updateUserApi({
+      id:form.value.id,
+      username:form.value.username,
+      password:form.value.password,
+      role:radio.value
+    })
+    if (res.status === 200) {
+      alert('更新成功')
+    }else {
+      alert('更新失败')
+    }
   }
   dialogFormVisible.value = false
 }
@@ -99,8 +124,14 @@ onMounted(() => {
       <el-table-column prop="username" label="用户名" width="150" />
       <el-table-column prop="role" label="角色" width="100" />
       <el-table-column prop="status" label="状态" width="100" />
-      <el-table-column prop="createdTime" label="创建时间" width="" />
-      <el-table-column prop="updatedTime" label="更新时间" width="" />
+      <el-table-column prop="createdTime" label="创建时间" width="200" />
+      <el-table-column prop="updatedTime" label="更新时间" width="200" />
+      <el-table-column label="操作" width="">
+        <template #default="{ row }">
+          <el-button  @click="updateUser(row)">编辑</el-button>
+          <el-button  @click="deleteUser(row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     </div>
   <div class="page">
@@ -124,7 +155,7 @@ onMounted(() => {
           <el-input v-model="form.password" autocomplete="off" />
         </el-form-item>
 
-        <el-form-item label="角色：">
+        <el-form-item v-show="currentRole === 2" label="角色：">
           <el-radio-group v-model="radio" :options="options" :props="props"/>
         </el-form-item>
       </el-form>
@@ -132,11 +163,12 @@ onMounted(() => {
 
     <div class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
-      <el-button @click="addUser">
+      <el-button @click="changeUser">
         确定
       </el-button>
     </div>
   </el-dialog>
+
 
 </template>
 
@@ -194,6 +226,9 @@ span{
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 20px; /* 按钮之间的间距 */
+}
+el-button{
+  display: flex;
 }
 
 </style>
