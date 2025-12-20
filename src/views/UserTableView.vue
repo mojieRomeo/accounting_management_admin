@@ -3,10 +3,12 @@ import {onMounted, ref} from 'vue'
 import {adminPageApi} from "@/api/adminPageApi";
 import {addUserApi} from "@/api/addUserApi";
 import {updateUserApi} from "@/api/updateUserApi";
+import {deleteUserApi} from "@/api/deleteUserApi";
 
 const tableData = ref([
 
 ])
+const keyword = ref('')
 const current = ref(1)
 const size = ref(10)
 const total = ref(0)
@@ -35,6 +37,7 @@ const adminPage = async () => {
   const res = await adminPageApi({
         current: current.value,
         size: size.value,
+        keyword: keyword.value
     })
     tableData.value = res.data.record
     total.value = res.data.total
@@ -60,6 +63,16 @@ const updateUser = (row: any) => {
   form.value.username = row.username
   form.value.password = ''//前段不回显密码
   radio.value = row.role
+}
+
+const deleteUser = async (row: any) => {
+  const res = await deleteUserApi(row.id)
+  if (res.status === 200) {
+    alert('删除成功')
+  }else {
+    alert('删除失败')
+  }
+  adminPage()
 }
 
 const changeUser = async () => {
@@ -88,6 +101,7 @@ const changeUser = async () => {
     }
   }
   dialogFormVisible.value = false
+  adminPage()
 }
 
 //翻页
@@ -111,7 +125,7 @@ onMounted(() => {
         placeholder="请输入关键字"
         clearable
     />
-    <button>
+    <button @click="adminPage">
       查找
     </button>
     <button @click="openDialog">
