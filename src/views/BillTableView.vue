@@ -88,6 +88,9 @@ onMounted(() => {
   max-width: 1100px;     /* 最大宽度（防止太宽） */
   margin: 20px auto;     /* 自动水平居中 + 上下留空 */
 }
+:deep(.el-table__row) {
+  height: 57px;
+}
 .page{
   display: flex;
   justify-content: space-between;

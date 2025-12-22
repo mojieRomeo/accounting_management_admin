@@ -10,7 +10,7 @@ const tableData = ref([
 ])
 const keyword = ref('')
 const current = ref(1)
-const size = ref(10)
+const size = ref(5)
 const total = ref(0)
 const dialogFormVisible = ref(false)
 const form = ref({
