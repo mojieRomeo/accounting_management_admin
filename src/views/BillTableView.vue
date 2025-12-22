@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {getBillPageApi} from "@/api/getBillPageApi";
+import { ArrowDown } from '@element-plus/icons-vue'
+
 const keyword = ref('')
 const current = ref(1)
-const size = ref(10)
+const size = ref(5)
 const total = ref(0)
+const costType = ref('')
 const tableData = ref([
 
 ])
@@ -12,12 +15,19 @@ const tableData = ref([
 const getBillPage = async () => {
   const res = await getBillPageApi({
     current : current.value,
-    size : size.value
+    size : size.value,
+    costType : costType.value
   })
   tableData.value = res.data.record
   total.value = res.data.total
   size.value = res.data.size
   current.value = res.data.current
+}
+
+const selectBillPage = (val:string) => {
+  costType.value = val
+  current.value = 1 //非常重要，每次查询回到第一页，像以后凡是涉及到点击查询都可以用此模版
+  getBillPage()
 }
 
 const pageChange = (val:any) => {
@@ -32,16 +42,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="input">
-    <el-input
-      v-model="keyword"
-      style="width: 240px"
-      placeholder="请输入关键字"
-      clearable
-  />
-  <button>
-    查找
-  </button></div>
+  <div class="el-dropdown">
+    <el-dropdown>
+    <span class="el-dropdown-link">
+      请选择费用类型
+      <el-icon class="el-icon--right">
+        <arrow-down />
+      </el-icon>
+    </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="selectBillPage('水费')">水费</el-dropdown-item>
+          <el-dropdown-item @click="selectBillPage('电费')">电费</el-dropdown-item>
+          <el-dropdown-item @click="selectBillPage('其他')">其他</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="id" label="id" width="80" />
@@ -77,10 +94,15 @@ onMounted(() => {
   margin-right: 85px;
   margin-top: 45px;
 }
-.input{
+.el-dropdown{
   display: flex;
-  margin-left: 85px;
   margin-top: 20px;
+}
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
 }
 button{
   margin-left: 20px;
