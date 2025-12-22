@@ -77,12 +77,12 @@ const goToLogin = () => {
 <template>
   <div class="login-page">
 
-    <!-- 顶部文案（默认显示） -->
+    <!-- 顶部文案 -->
     <div class="welcome-text">
       Create&nbsp;an&nbsp;Account
     </div>
 
-    <!-- 注册卡片（hover 才出现 + 磁吸） -->
+    <!-- 注册卡片 -->
     <div
         class="login-card"
         :style="cardStyle"
@@ -111,7 +111,7 @@ const goToLogin = () => {
 
 <style scoped>
 /* =========================
-   页面背景（与登录页一致）
+   页面背景
 ========================= */
 .login-page {
   min-height: 100vh;
@@ -210,7 +210,7 @@ const goToLogin = () => {
 }
 
 /* =========================
-   注册卡片（默认隐藏）
+   注册卡片
 ========================= */
 .login-card {
   width: 340px;
@@ -246,7 +246,7 @@ const goToLogin = () => {
 }
 
 /* =========================
-   卡片内容
+   卡片内容（重点修复蓝边）
 ========================= */
 .login-card h2 {
   font-size: 22px;
@@ -261,13 +261,22 @@ const goToLogin = () => {
   border: none;
   background: #f3f4f6;
   padding: 0 14px;
+  font-size: 14px;
+
+  outline: none;                /* ❌ 干掉浏览器蓝框 */
+  box-shadow: none;             /* ❌ 干掉默认 focus */
+  transition: all .25s ease;
 }
 
+/* ✅ 登录页同款 focus 效果 */
 .login-card input:focus {
   background: #fff;
   box-shadow: 0 0 0 4px rgba(236,72,153,0.25);
 }
 
+/* =========================
+   按钮 & 文案
+========================= */
 .login-card button {
   width: 240px;
   height: 42px;
@@ -291,7 +300,7 @@ const goToLogin = () => {
 }
 
 /* =========================
-   🔥 单选框主题色覆盖（去蓝）
+   单选框主题色（去蓝）
 ========================= */
 .theme-radio :deep(.el-radio__inner) {
   border-color: #ec4899;
