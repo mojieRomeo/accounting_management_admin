@@ -60,10 +60,7 @@ const goToRegister = () => {
 
 <template>
   <div class="login-page">
-
-    <div class="welcome-text">
-      Welcome&nbsp;Home
-    </div>
+    <div class="welcome-text">Welcome&nbsp;Home</div>
 
     <div
         class="login-card"
@@ -103,20 +100,14 @@ const goToRegister = () => {
   perspective: 1200px;
 }
 
-/* 整体轻朦胧 */
 .login-page::before {
   content: '';
   position: absolute;
   inset: 0;
   backdrop-filter: blur(6px);
-  pointer-events: none;
   z-index: 1;
 }
 
-/* =========================
-   漫画网点（粒子引力场）
-   ✅ 唯一被修改的部分
-========================= */
 .login-page::after {
   content: '';
   position: absolute;
@@ -124,21 +115,10 @@ const goToRegister = () => {
   z-index: 2;
   pointer-events: none;
 
-  /* 单层黑点 */
   background:
-      radial-gradient(
-          circle,
-          rgba(0,0,0,0.7) 1.2px,
-          transparent 2.4px
-      );
-
-  /* 基础点阵密度 */
+      radial-gradient(circle, rgba(0,0,0,0.7) 1.2px, transparent 2.4px);
   background-size: 6px 6px;
 
-  /* 🔥 引力场核心：
-     - 中心：稀疏 + 大 + 黑（压迫）
-     - 外围：密 + 小 + 透明
-  */
   mask-image: radial-gradient(
       circle at center,
       rgba(0,0,0,0.08) 0%,
@@ -150,86 +130,45 @@ const goToRegister = () => {
 
   opacity: 0.35;
 
-  /* 像活物一样被吸住 */
   animation:
       dotsAttract 38s linear infinite,
       dotsBreath 6s ease-in-out infinite;
 }
 
-/* 向心漂移（被卡片吸） */
 @keyframes dotsAttract {
-  0% {
-    background-position: 0 0;
-  }
-  50% {
-    background-position: -140px -100px;
-  }
-  100% {
-    background-position: 0 0;
-  }
+  0% { background-position: 0 0; }
+  50% { background-position: -140px -100px; }
+  100% { background-position: 0 0; }
 }
 
-/* 压迫感呼吸 */
 @keyframes dotsBreath {
-  0%,100% {
-    filter: contrast(1);
-  }
-  50% {
-    filter: contrast(1.3);
-  }
+  0%,100% { filter: contrast(1); }
+  50% { filter: contrast(1.3); }
 }
 
-/* =========================
-   Welcome Home 文案
-========================= */
 .welcome-text {
   position: absolute;
   z-index: 3;
-
   font-size: 42px;
   letter-spacing: 4px;
   font-weight: 600;
-
-  font-family:
-      'Hiragino Sans',
-      'PingFang SC',
-      'Microsoft YaHei',
-      sans-serif;
-
   color: rgba(255,255,255,0.92);
-
   text-shadow:
       0 0 12px rgba(236,72,153,0.35),
       0 0 24px rgba(236,72,153,0.25);
-
-  opacity: 0.85;
-
-  transition:
-      opacity 0.5s ease,
-      transform 0.6s ease,
-      filter 0.5s ease;
-
-  pointer-events: none;
-
   animation: welcomeBreath 3s ease-in-out infinite;
+  transition: all 0.6s ease;
 }
 
 @keyframes welcomeBreath {
-  0%, 100% {
-    opacity: 0.75;
-    letter-spacing: 4px;
-  }
-  50% {
-    opacity: 1;
-    letter-spacing: 6px;
-  }
+  0%,100% { opacity: .75; letter-spacing: 4px; }
+  50% { opacity: 1; letter-spacing: 6px; }
 }
 
 .login-page:hover .welcome-text {
   opacity: 0;
   transform: translateY(-20px);
   filter: blur(6px);
-  animation: none;
 }
 
 /* =========================
@@ -238,31 +177,27 @@ const goToRegister = () => {
 .login-card {
   width: 340px;
   padding: 36px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-
   background: rgba(255,255,255,0.78);
   backdrop-filter: blur(20px);
-
   border-radius: 20px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.18);
-
   opacity: 0;
-  transform: translateY(40px) scale(0.85);
-
+  pointer-events: none;
+  transform: translateY(40px) scale(.85);
   transition:
-      opacity 0.5s ease,
-      transform 0.6s cubic-bezier(.34,1.56,.64,1);
-
-  position: relative;
+      opacity .5s ease,
+      transform .6s cubic-bezier(.34,1.56,.64,1);
+  transform-style: preserve-3d;
   z-index: 4;
 }
 
 .login-page:hover .login-card {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0) scale(1);
 }
 
@@ -284,7 +219,8 @@ const goToRegister = () => {
   padding: 0 14px;
   font-size: 14px;
   outline: none;
-  transition: all 0.25s ease;
+  box-shadow: none;
+  transition: all .25s ease;
 }
 
 .login-card input:focus {
@@ -297,22 +233,10 @@ const goToRegister = () => {
   height: 42px;
   border-radius: 999px;
   border: none;
-
   background: linear-gradient(135deg,#ec4899,#f472b6);
   color: #fff;
-  font-size: 15px;
   font-weight: 600;
-
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(.68,-0.55,.27,1.55);
-}
-
-.login-card button:hover {
-  transform: scale(1.05);
-}
-
-.login-card button:active {
-  transform: scale(0.95);
 }
 
 .login-card p {
@@ -330,9 +254,33 @@ const goToRegister = () => {
   position: absolute;
   top: 16px;
   right: 18px;
-  font-size: 16px;
   color: #ec4899;
-  opacity: 0.8;
-  transform: translateZ(30px);
+}
+
+/* =========================
+   🔥 灭蓝框 CSS
+========================= */
+:deep(*:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login-card input,
+.login-card button,
+.login-card p {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.login-card button:focus,
+.login-card button:active,
+.login-card button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login-card button::-moz-focus-inner {
+  border: 0;
 }
 </style>

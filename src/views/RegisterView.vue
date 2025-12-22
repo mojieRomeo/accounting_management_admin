@@ -8,7 +8,6 @@ const password = ref('')
 const router = useRouter()
 const radio = ref()
 
-/* ===== 卡片磁吸 ===== */
 const cardStyle = ref({
   transform: 'rotateX(0deg) rotateY(0deg)'
 })
@@ -37,7 +36,6 @@ const resetCard = () => {
   }
 }
 
-/* ===== 原有逻辑 ===== */
 const props = { value: 'id', label: 'role', disabled: 'unable' }
 
 const options = [
@@ -77,12 +75,10 @@ const goToLogin = () => {
 <template>
   <div class="login-page">
 
-    <!-- 顶部文案 -->
     <div class="welcome-text">
       Create&nbsp;an&nbsp;Account
     </div>
 
-    <!-- 注册卡片 -->
     <div
         class="login-card"
         :style="cardStyle"
@@ -110,9 +106,6 @@ const goToLogin = () => {
 </template>
 
 <style scoped>
-/* =========================
-   页面背景
-========================= */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -128,7 +121,6 @@ const goToLogin = () => {
   perspective: 1200px;
 }
 
-/* 朦胧层 */
 .login-page::before {
   content: '';
   position: absolute;
@@ -137,9 +129,6 @@ const goToLogin = () => {
   z-index: 1;
 }
 
-/* =========================
-   漫画网点黑洞
-========================= */
 .login-page::after {
   content: '';
   position: absolute;
@@ -178,9 +167,6 @@ const goToLogin = () => {
   50% { filter: contrast(1.3); }
 }
 
-/* =========================
-   顶部文案
-========================= */
 .welcome-text {
   position: absolute;
   z-index: 3;
@@ -209,9 +195,6 @@ const goToLogin = () => {
   filter: blur(6px);
 }
 
-/* =========================
-   注册卡片
-========================= */
 .login-card {
   width: 340px;
   padding: 36px;
@@ -245,9 +228,6 @@ const goToLogin = () => {
   transform: translateY(0) scale(1);
 }
 
-/* =========================
-   卡片内容（重点修复蓝边）
-========================= */
 .login-card h2 {
   font-size: 22px;
   font-weight: 600;
@@ -263,20 +243,16 @@ const goToLogin = () => {
   padding: 0 14px;
   font-size: 14px;
 
-  outline: none;                /* ❌ 干掉浏览器蓝框 */
-  box-shadow: none;             /* ❌ 干掉默认 focus */
+  outline: none;
+  box-shadow: none;
   transition: all .25s ease;
 }
 
-/* ✅ 登录页同款 focus 效果 */
 .login-card input:focus {
   background: #fff;
   box-shadow: 0 0 0 4px rgba(236,72,153,0.25);
 }
 
-/* =========================
-   按钮 & 文案
-========================= */
 .login-card button {
   width: 240px;
   height: 42px;
@@ -299,9 +275,6 @@ const goToLogin = () => {
   text-decoration: underline;
 }
 
-/* =========================
-   单选框主题色（去蓝）
-========================= */
 .theme-radio :deep(.el-radio__inner) {
   border-color: #ec4899;
 }
@@ -319,11 +292,38 @@ const goToLogin = () => {
   color: #ec4899;
 }
 
-/* ========================= */
 .heart {
   position: absolute;
   top: 16px;
   right: 18px;
   color: #ec4899;
+}
+
+/* =========================
+   🔥 灭蓝框 CSS
+========================= */
+
+:deep(*:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login-card input,
+.login-card button,
+.login-card p {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.login-card button:focus,
+.login-card button:active,
+.login-card button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login-card button::-moz-focus-inner {
+  border: 0;
 }
 </style>
