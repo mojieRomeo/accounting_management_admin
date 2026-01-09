@@ -1,5 +1,11 @@
 <template>
   <div class="layout">
+
+
+
+
+
+  
     <!-- 顶栏 -->
     <header class="top">
       <h2 class="title">工作室记账系统</h2>
