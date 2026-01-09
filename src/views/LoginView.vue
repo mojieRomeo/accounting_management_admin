@@ -30,6 +30,12 @@ const goToRegister = () => {
 }
 </script>
 
+
+
+
+
+
+
 <template>
   <div class="login">
     <h2>登录</h2>
