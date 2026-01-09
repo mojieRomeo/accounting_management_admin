@@ -58,12 +58,6 @@ const goToRegister = () => {
 }
 </script>
 
-
-
-
-
-
-
 <template>
   <div class="login-page">
     <div class="welcome-text">Welcome&nbsp;Home</div>
