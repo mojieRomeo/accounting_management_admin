@@ -1,76 +1,84 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+import {getBillPageApi} from "@/api/getBillPageApi";
+import { ArrowDown } from '@element-plus/icons-vue'
+
 const keyword = ref('')
-const tableData = [{
-  "id":1,
-  "事项": '吃饭',
-  "金额": 100,
-  "入账出账时间": '2023-01-01',
-},{
-  "id":2,
-  "事项": '购物',
-  "金额": 200,
-  "入账出账时间": '2023-01-02',
-},{
-  "id":3,
-  "事项": '出行',
-  "金额": 300,
-  "入账出账时间": '2023-01-03',
-},{
-  "id":4,
-  "事项": '娱乐',
-  "金额": 400,
-  "入账出账时间": '2023-01-04',
-},{
-  "id":5,
-  "事项": '其他',
-  "金额": 500,
-  "入账出账时间": '2023-01-05',
-},{
-  "id":6,
-  "事项": '吃饭',
-  "金额": 100,
-  "入账出账时间": '2023-01-01',
-},{
-  "id":7,
-  "事项": '购物',
-  "金额": 200,
-  "入账出账时间": '2023-01-02',
-},{
-  "id":8,
-  "事项": '出行',
-  "金额": 300,
-  "入账出账时间": '2023-01-03',
-}]
+const current = ref(1)
+const size = ref(5)
+const total = ref(0)
+const costType = ref('')
+const tableData = ref([
+
+])
+
+const getBillPage = async () => {
+  const res = await getBillPageApi({
+    current : current.value,
+    size : size.value,
+    costType : costType.value
+  })
+  tableData.value = res.data.record
+  total.value = res.data.total
+  size.value = res.data.size
+  current.value = res.data.current
+}
+
+const selectBillPage = (val:string) => {
+  costType.value = val
+  current.value = 1 //非常重要，每次查询回到第一页，像以后凡是涉及到点击查询都可以用此模版
+  getBillPage()
+}
+
+const pageChange = (val:any) => {
+  current.value = val
+  getBillPage()
+}
+
+onMounted(() => {
+  getBillPage()
+})
+
 </script>
 
 <template>
-  <div class="input">
-    <el-input
-      v-model="keyword"
-      style="width: 240px"
-      placeholder="请输入关键字"
-      clearable
-  />
-  <button>
-    查找
-  </button></div>
+  <div class="el-dropdown">
+    <el-dropdown>
+    <span class="el-dropdown-link">
+      请选择费用类型
+      <el-icon class="el-icon--right">
+        <arrow-down />
+      </el-icon>
+    </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="selectBillPage('水费')">水费</el-dropdown-item>
+          <el-dropdown-item @click="selectBillPage('电费')">电费</el-dropdown-item>
+          <el-dropdown-item @click="selectBillPage('其他')">其他</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="id" label="id" width="100" />
-      <el-table-column prop="userId" label="用户id" width="100" />
+      <el-table-column prop="id" label="id" width="80" />
+      <el-table-column prop="userId" label="用户id" width="80" />
       <el-table-column prop="title" label="事项" width="" />
-      <el-table-column prop="type" label="类型（1=入账，2=出账）" width="100" />
-      <el-table-column prop="amount" label="金额" width="" />
-      <el-table-column prop="createTime" label="创建时间" width="" />
-      <el-table-column prop="updateTime" label="更新时间" width="" />
+      <el-table-column prop="type" label="类型" width="100" />
+      <el-table-column prop="amount" label="金额" width="100" />
+      <el-table-column prop="createdTime" label="创建时间" width="" />
+      <el-table-column prop="updatedTime" label="更新时间" width="" />
     </el-table>
   </div>
   <div class="page">
     <span>
-      共100页
+      当前{{current}}页，共{{total}}条
     </span>
-    <el-pagination background layout="prev, pager, next" :total="1000" />
+    <el-pagination background layout="prev, pager, next"
+                   :total="total"
+                   :page-size="size"
+                   :current-page="current"
+                   @current-change="pageChange"/>
   </div>
 </template>
 
@@ -80,16 +88,24 @@ const tableData = [{
   max-width: 1100px;     /* 最大宽度（防止太宽） */
   margin: 20px auto;     /* 自动水平居中 + 上下留空 */
 }
+:deep(.el-table__row) {
+  height: 57px;
+}
 .page{
   display: flex;
   justify-content: space-between;
   margin-right: 85px;
   margin-top: 45px;
 }
-.input{
+.el-dropdown{
   display: flex;
-  margin-left: 85px;
   margin-top: 20px;
+}
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
 }
 button{
   margin-left: 20px;
