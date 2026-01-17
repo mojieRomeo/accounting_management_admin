@@ -10,7 +10,7 @@ const tableData = ref([
 ])
 const keyword = ref('')
 const current = ref(1)
-const size = ref(5)
+const size = ref(10)
 const total = ref(0)
 const dialogFormVisible = ref(false)
 const form = ref({
@@ -41,8 +41,6 @@ const adminPage = async () => {
     })
     tableData.value = res.data.record
     total.value = res.data.total
-    current.value = res.data.current
-    size.value = res.data.size
 }
 
 const openDialog = () => {
@@ -134,13 +132,23 @@ onMounted(() => {
   </div>
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="id" label="id" width="100" />
-      <el-table-column prop="username" label="用户名" width="150" />
-      <el-table-column prop="role" label="角色" width="100" />
-      <el-table-column prop="status" label="状态" width="100" />
-      <el-table-column prop="createdTime" label="创建时间" width="200" />
-      <el-table-column prop="updatedTime" label="更新时间" width="200" />
-      <el-table-column label="操作" width="">
+      <el-table-column prop="id" label="id" width="100" align="center"/>
+      <el-table-column prop="username" label="用户名" width="150" align="center"/>
+      <el-table-column prop="role" label="角色" width="100" align="center">
+        <template #default="{ row }">
+            <div v-if="row.role === 0">用户</div>
+            <div v-else>管理员</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="status" label="状态" width="100" align="center">
+        <template #default="{ row }">
+          <div v-if="row.status === 0">禁用</div>
+          <div v-else>启用</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdTime" label="创建时间" width="200" align="center"/>
+      <el-table-column prop="updatedTime" label="更新时间" width="200" align="center"/>
+      <el-table-column label="操作" width="" align="center">
         <template #default="{ row }">
           <el-button  @click="updateUser(row)">编辑</el-button>
           <el-button  @click="deleteUser(row)">删除</el-button>
@@ -196,7 +204,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   margin-right: 85px;
-  margin-top: 45px;
+  margin-top: 30px;
 }
 .input{
   display: flex;

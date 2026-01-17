@@ -15,7 +15,7 @@
     <!-- 顶栏 -->
     <header class="top">
       <h2 class="title">工作室记账系统</h2>
-      <h2 class="context">欢迎您{{username}}</h2>
+      <h2 class="context" @click="goToCenter">欢迎您{{username}}</h2>
       <button @click="logout">退出登录</button>
     </header>
 
@@ -75,10 +75,14 @@ const logout = () =>{
   router.push('/login')
 }
 
+const goToCenter = () => router.push('/home/center')
+
 const goToEcharts = () => router.push('/home/echarts')
 const goToBillTable = () => router.push('/home/billTable')
 
 const goToUserTable = () => router.push('/home/userTable')
+
+
 </script>
 
 <style scoped>

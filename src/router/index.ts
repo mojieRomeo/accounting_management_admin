@@ -5,6 +5,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import BillTableView from "@/views/BillTableView.vue";
 import ChartView from "@/views/ChartView.vue";
 import UserTableView from "@/views/UserTableView.vue";
+import UserCenterView from "../views/UserCenterView.vue";
 
 const routes = [
     {path: '/', redirect: '/login'}, //默认跳转
@@ -21,6 +22,8 @@ const routes = [
                 path: 'echarts', component: ChartView
             },{
                 path: 'userTable', component: UserTableView
+            },{
+                path: 'center', component: UserCenterView
             }]
     }
 

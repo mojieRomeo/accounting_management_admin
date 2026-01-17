@@ -5,7 +5,7 @@ import { ArrowDown } from '@element-plus/icons-vue'
 
 const keyword = ref('')
 const current = ref(1)
-const size = ref(5)
+const size = ref(10)
 const total = ref(0)
 const costType = ref('')
 const tableData = ref([
@@ -61,13 +61,19 @@ onMounted(() => {
   </div>
   <div class="table-wrapper">
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="id" label="id" width="80" />
-      <el-table-column prop="userId" label="用户id" width="80" />
-      <el-table-column prop="title" label="事项" width="" />
-      <el-table-column prop="type" label="类型" width="100" />
-      <el-table-column prop="amount" label="金额" width="100" />
-      <el-table-column prop="createdTime" label="创建时间" width="" />
-      <el-table-column prop="updatedTime" label="更新时间" width="" />
+      <el-table-column prop="id" label="id" width="80" align="center"/>
+      <el-table-column prop="userId" label="用户id" width="80" align="center"/>
+      <el-table-column prop="title" label="事项" width="" align="center"/>
+      <el-table-column prop="type" label="类型" width="100" align="center">
+        <template #default="{ row }">
+          <div v-if="row.type === 2">支出</div>
+          <div v-else>收入</div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="amount" label="金额" width="100" align="center"/>
+      <el-table-column prop="createdTime" label="创建时间" width="" align="center"/>
+      <el-table-column prop="updatedTime" label="更新时间" width="" align="center"/>
     </el-table>
   </div>
   <div class="page">
@@ -95,7 +101,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   margin-right: 85px;
-  margin-top: 45px;
+  margin-top: 30px;
 }
 .el-dropdown{
   display: flex;
