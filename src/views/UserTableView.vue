@@ -10,7 +10,7 @@ const tableData = ref([
 ])
 const keyword = ref('')
 const current = ref(1)
-const size = ref(10)
+const size = ref(5)
 const total = ref(0)
 const dialogFormVisible = ref(false)
 const form = ref({
@@ -35,12 +35,12 @@ const options = [
 const currentRole = Number(localStorage.getItem('role'))
 const adminPage = async () => {
   const res = await adminPageApi({
-        current: current.value,
-        size: size.value,
-        keyword: keyword.value
-    })
-    tableData.value = res.data.record
-    total.value = res.data.total
+    current: current.value,
+    size: size.value,
+    keyword: keyword.value
+  })
+  tableData.value = res.data.record
+  total.value = res.data.total
 }
 
 const openDialog = () => {
@@ -82,7 +82,10 @@ const changeUser = async () => {
     })
     if (res.status === 200) {
       alert('添加成功')
-    }else {
+    }
+    else if(form.value.password === ''){
+      alert('密码不能为空')
+    }else{
       alert('添加失败')
     }
   }else{
@@ -136,8 +139,8 @@ onMounted(() => {
       <el-table-column prop="username" label="用户名" width="150" align="center"/>
       <el-table-column prop="role" label="角色" width="100" align="center">
         <template #default="{ row }">
-            <div v-if="row.role === 0">用户</div>
-            <div v-else>管理员</div>
+          <div v-if="row.role === 0">用户</div>
+          <div v-else>管理员</div>
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态" width="100" align="center">
@@ -155,7 +158,7 @@ onMounted(() => {
         </template>
       </el-table-column>
     </el-table>
-    </div>
+  </div>
   <div class="page">
     <span>
       当前{{current}}页，共{{total}}条
@@ -196,41 +199,62 @@ onMounted(() => {
 
 <style scoped>
 .table-wrapper {
-  width: 90%;            /* 表格宽度 */
-  max-width: 1100px;     /* 最大宽度（防止太宽） */
-  margin: 20px auto;     /* 自动水平居中 + 上下留空 */
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px auto;
 }
+
 .page{
   display: flex;
   justify-content: space-between;
   margin-right: 85px;
   margin-top: 30px;
 }
+
 .input{
   display: flex;
   margin-left: 85px;
   margin-top: 20px;
 }
+
+/* =========================
+   原生 button（灭蓝框）
+========================= */
 button{
   margin-left: 20px;
   width: 80px;
   height: 40px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  border-radius: 999px;
+  border: 1px solid #fbcfe8;
+  background: #fdf2f8;
+  color: #ec4899;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* 添加过渡效果 */
+  font-weight: 500;
+  transition: all .25s ease;
+  outline: none;
 }
 
-button:hover {
-  background-color: #666; /* 悬停时背景颜色 */
-  color: #fff; /* 悬停时文字颜色 */
+button:hover{
+  background: #ec4899;
+  color: #fff;
 }
+
+button:focus,
+button:active,
+button:focus-visible{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   文本
+========================= */
 span{
   font-size: 16px;
-  color: #666;
+  color: #fff;          /* ✅ 共几条 / 共几页 → 白色 */
   margin-left:85px;
 }
+
 .dialog{
   display: flex;
   justify-content: center;
@@ -238,7 +262,7 @@ span{
 }
 
 .form{
-  width: 300px; /* 表单宽度固定，让内容居中更稳定 */
+  width: 300px;
   margin: 0 auto;
 }
 
@@ -247,10 +271,132 @@ span{
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 20px;
-  gap: 20px; /* 按钮之间的间距 */
+  gap: 20px;
 }
+
 el-button{
   display: flex;
 }
 
+/* =========================
+   el-input（登录页同款）
+========================= */
+:deep(.el-input__wrapper){
+  background: #f3f4f6;
+  box-shadow: none !important;
+  transition: all .25s ease;
+}
+
+:deep(.el-input__wrapper.is-focus){
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(236,72,153,.25) !important;
+}
+
+/* =========================
+   radio（粉色）
+========================= */
+:deep(.el-radio__inner){
+  border-color: #fbcfe8;
+}
+
+:deep(.el-radio__input.is-checked .el-radio__inner){
+  background-color: #ec4899;
+  border-color: #ec4899;
+}
+
+:deep(.el-radio__input.is-checked + .el-radio__label){
+  color: #ec4899;
+}
+
+/* =========================
+   el-button（Element Plus）
+========================= */
+:deep(.el-button){
+  background: #fdf2f8;
+  color: #ec4899;
+  border-color: #fbcfe8;
+  transition: all .25s ease;
+}
+
+:deep(.el-button:hover){
+  background: #ec4899;
+  color: #fff;
+  border-color: #ec4899;
+}
+
+:deep(.el-button:focus),
+:deep(.el-button:active),
+:deep(.el-button:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   🔥 分页：彻底干掉蓝色（关键）
+========================= */
+
+/* 覆盖 Element Plus 背景变量 */
+:deep(.el-pagination){
+  --el-pagination-bg-color: #fdf2f8;
+  --el-pagination-button-color: #ec4899;
+  --el-pagination-hover-color: #fff;
+}
+
+/* 初始态：所有页（包括 1） */
+:deep(.el-pagination .el-pager li),
+:deep(.el-pagination .el-pager li:first-child){
+  background: #fdf2f8 !important;
+  color: #ec4899 !important;
+  font-size: 14px;
+  transition: all .25s ease;
+}
+
+/* ❌ 取消 active 蓝色（包括 1 页） */
+:deep(.el-pagination .el-pager li.is-active){
+  background: #fdf2f8 !important;
+  color: #ec4899 !important;
+}
+
+/* hover 当前页（最大） */
+:deep(.el-pagination .el-pager li:hover){
+  background: #ec4899 !important;
+  color: #fff !important;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* hover 相邻页（次大） */
+:deep(.el-pagination .el-pager li:hover + li),
+:deep(.el-pagination .el-pager li:has(+ li:hover)){
+  background: #f472b6 !important;
+  color: #fff !important;
+  font-size: 18px;
+}
+
+/* hover 第二层相邻 */
+:deep(.el-pagination .el-pager li:hover + li + li),
+:deep(.el-pagination .el-pager li:has(+ li + li:hover)){
+  background: #fbcfe8 !important;
+  color: #ec4899 !important;
+  font-size: 16px;
+}
+
+/* prev / next */
+:deep(.el-pagination button){
+  background: #fdf2f8 !important;
+  color: #ec4899 !important;
+  transition: all .25s ease;
+}
+
+:deep(.el-pagination button:hover){
+  background: #f472b6 !important;
+  color: #fff !important;
+}
+
+/* 共 xx 条 */
+:deep(.el-pagination__total){
+  color: #fff !important;
+}
+
 </style>
+
