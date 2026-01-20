@@ -82,9 +82,6 @@ const changeUser = async () => {
     })
     if (res.status === 200) {
       alert('添加成功')
-    }
-    else if(form.value.password === ''){
-      alert('密码不能为空')
     }else{
       alert('添加失败')
     }
@@ -97,7 +94,9 @@ const changeUser = async () => {
     })
     if (res.status === 200) {
       alert('更新成功')
-    }else {
+    }else if(form.value.password === ''){
+      alert('密码为空，更新失败')
+    }else{
       alert('更新失败')
     }
   }
@@ -218,7 +217,7 @@ onMounted(() => {
 }
 
 /* =========================
-   原生 button（灭蓝框）
+   原生 button
 ========================= */
 button{
   margin-left: 20px;
@@ -251,7 +250,7 @@ button:focus-visible{
 ========================= */
 span{
   font-size: 16px;
-  color: #fff;          /* ✅ 共几条 / 共几页 → 白色 */
+  color: #fff;
   margin-left:85px;
 }
 
@@ -274,16 +273,13 @@ span{
   gap: 20px;
 }
 
-el-button{
-  display: flex;
-}
-
 /* =========================
-   el-input（登录页同款）
+   el-input
 ========================= */
 :deep(.el-input__wrapper){
   background: #f3f4f6;
   box-shadow: none !important;
+  border-radius: 14px;
   transition: all .25s ease;
 }
 
@@ -293,23 +289,45 @@ el-button{
 }
 
 /* =========================
-   radio（粉色）
+   🔥 radio（无延迟 · 灭蓝 · 正确优先级）
 ========================= */
-:deep(.el-radio__inner){
-  border-color: #fbcfe8;
+
+/* label：恢复正常字重 */
+:deep(.el-radio__label){
+  font-weight: 400 !important;
+  color: #111 !important;
+  transition: color .2s ease;
 }
 
+/* 初始圈：粉色空心 */
+:deep(.el-radio__inner){
+  border-color: #fbcfe8 !important;
+  background: #fff !important;
+  transition: all .2s ease;
+}
+
+/* hover：圈仍是粉，字变粉（不影响 checked） */
+:deep(.el-radio:hover .el-radio__inner){
+  border-color: #ec4899 !important;
+}
+
+:deep(.el-radio:hover .el-radio__label){
+  color: #ec4899 !important;
+}
+
+/* ✅ checked：最高优先级（立刻生效，无延迟） */
 :deep(.el-radio__input.is-checked .el-radio__inner){
-  background-color: #ec4899;
-  border-color: #ec4899;
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
 }
 
 :deep(.el-radio__input.is-checked + .el-radio__label){
-  color: #ec4899;
+  color: #ec4899 !important;
+  font-weight: 400 !important;
 }
 
 /* =========================
-   el-button（Element Plus）
+   el-button
 ========================= */
 :deep(.el-button){
   background: #fdf2f8;
@@ -332,32 +350,26 @@ el-button{
 }
 
 /* =========================
-   🔥 分页：彻底干掉蓝色（关键）
+   分页（整合为粉色渐变 hover 效果）
 ========================= */
-
-/* 覆盖 Element Plus 背景变量 */
 :deep(.el-pagination){
   --el-pagination-bg-color: #fdf2f8;
   --el-pagination-button-color: #ec4899;
   --el-pagination-hover-color: #fff;
 }
 
-/* 初始态：所有页（包括 1） */
-:deep(.el-pagination .el-pager li),
-:deep(.el-pagination .el-pager li:first-child){
+:deep(.el-pagination .el-pager li){
   background: #fdf2f8 !important;
   color: #ec4899 !important;
   font-size: 14px;
   transition: all .25s ease;
 }
 
-/* ❌ 取消 active 蓝色（包括 1 页） */
 :deep(.el-pagination .el-pager li.is-active){
   background: #fdf2f8 !important;
   color: #ec4899 !important;
 }
 
-/* hover 当前页（最大） */
 :deep(.el-pagination .el-pager li:hover){
   background: #ec4899 !important;
   color: #fff !important;
@@ -365,7 +377,6 @@ el-button{
   font-weight: 600;
 }
 
-/* hover 相邻页（次大） */
 :deep(.el-pagination .el-pager li:hover + li),
 :deep(.el-pagination .el-pager li:has(+ li:hover)){
   background: #f472b6 !important;
@@ -373,7 +384,6 @@ el-button{
   font-size: 18px;
 }
 
-/* hover 第二层相邻 */
 :deep(.el-pagination .el-pager li:hover + li + li),
 :deep(.el-pagination .el-pager li:has(+ li + li:hover)){
   background: #fbcfe8 !important;
@@ -381,7 +391,6 @@ el-button{
   font-size: 16px;
 }
 
-/* prev / next */
 :deep(.el-pagination button){
   background: #fdf2f8 !important;
   color: #ec4899 !important;
@@ -393,7 +402,6 @@ el-button{
   color: #fff !important;
 }
 
-/* 共 xx 条 */
 :deep(.el-pagination__total){
   color: #fff !important;
 }
