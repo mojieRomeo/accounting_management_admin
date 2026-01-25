@@ -1,67 +1,11 @@
-<template>
-  <div class="layout" @click="createHeart">
-    <!-- 顶栏 -->
-    <header class="top">
-      <h2 class="title cute-title">WORK STUDIO</h2>
-
-      <h2 class="context" @click.stop="goToCenter">
-        Welcome&nbsp;Home,&nbsp;{{ username }}
-      </h2>
-
-      <button class="logout-btn" @click.stop="logout">退出</button>
-    </header>
-
-    <!-- 主体 -->
-    <div class="body">
-      <el-scrollbar class="sideScroll">
-        <aside
-            class="sideBar floating"
-            :style="sideStyle"
-            @mousemove="handleSideMove"
-            @mouseleave="resetSide"
-        >
-          <ul>
-            <li @click="goToEcharts">可视分析</li>
-            <li @click="goToBillTable">账目管理</li>
-            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户中心</li>
-            <li @click="goToEcharts">可视分析</li>
-            <li @click="goToBillTable">账目管理</li>
-            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户中心</li>
-            <li @click="goToEcharts">可视分析</li>
-            <li @click="goToBillTable">账目管理</li>
-            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户中心</li>
-            <li @click="goToEcharts">可视分析</li>
-            <li @click="goToBillTable">账目管理</li>
-            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户中心</li>
-            <li @click="goToEcharts">可视分析</li>
-            <li @click="goToBillTable">账目管理</li>
-            <li v-show="role === 1 || role === 2" @click="goToUserTable">用户中心</li>
-          </ul>
-        </aside>
-      </el-scrollbar>
-
-      <div class="main">
-        <router-view />
-      </div>
-    </div>
-
-    <!-- 爱心 -->
-    <span
-        v-for="h in hearts"
-        :key="h.id"
-        class="heart"
-        :style="h.style"
-    >❤</span>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
-const username = ref(localStorage.getItem('username'))
-const role = Number(localStorage.getItem('role'))
+const userStore = useUserStore()
+const currentRole = ref(Number(localStorage.getItem('role') || ''))
 
 /* ========================
    路由
@@ -88,36 +32,93 @@ const handleSideMove = (e: MouseEvent) => {
   const ry = ((e.clientX - r.left) / r.width - 0.5) * 8
   sideStyle.value = { transform: `rotateX(${rx}deg) rotateY(${ry}deg)` }
 }
+
 const resetSide = () => {
   sideStyle.value = { transform: 'rotateX(0) rotateY(0)' }
 }
-
-/* ========================
-   爱心特效
-======================== */
-const hearts = ref<any[]>([])
-let hid = 0
-
-const createHeart = (e: MouseEvent) => {
-  const count = Math.random() > 0.6 ? 2 : 1
-
-  for (let i = 0; i < count; i++) {
-    const id = hid++
-    hearts.value.push({
-      id,
-      style: {
-        left: `${e.clientX + (Math.random() * 20 - 10)}px`,
-        top: `${e.clientY + (Math.random() * 20 - 10)}px`,
-        transform: `scale(${0.8 + Math.random() * 0.4})`
-      }
-    })
-
-    setTimeout(() => {
-      hearts.value = hearts.value.filter(h => h.id !== id)
-    }, 1200)
-  }
-}
 </script>
+
+<template>
+  <div class="layout">
+    <header class="top">
+      <h2 class="title cute-title">WORK STUDIO</h2>
+
+      <!-- ⭐ 这里自动响应 username -->
+      <h2 class="context" @click="goToCenter">
+        Welcome&nbsp;Home,&nbsp;{{ userStore.username }}
+      </h2>
+
+      <button class="logout-btn" @click="logout">退出</button>
+    </header>
+
+    <div class="body">
+      <el-scrollbar class="sideScroll">
+        <aside
+            class="sideBar floating"
+            :style="sideStyle"
+            @mousemove="handleSideMove"
+            @mouseleave="resetSide"
+        >
+          <ul>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+            <li @click="goToEcharts">可视分析</li>
+            <li @click="goToBillTable">账目管理</li>
+            <li v-show="currentRole === 1 || currentRole === 2"
+                @click="goToUserTable">
+              用户中心
+            </li>
+          </ul>
+        </aside>
+      </el-scrollbar>
+
+      <div class="main">
+        <router-view />
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 /* =========================

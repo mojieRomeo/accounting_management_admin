@@ -1,43 +1,77 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import { ref } from "vue"
 import { UserFilled } from '@element-plus/icons-vue'
+import { updateUserInfoApi } from "@/api/updateUserInfoApi"
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+
 const form = ref({
-  name: '',
+  username: userStore.username, // ⭐ 初始值来自 pinia
   password: ''
 })
 
-const onSubmit = () => {
-  console.log('submit!')
+const avatarUrl = ref('')
+
+const handleAvatarUpload = (file: any) => {
+  avatarUrl.value = URL.createObjectURL(file.raw)
+}
+
+const onSubmit = async () => {
+  const res = await updateUserInfoApi({
+    username: form.value.username,
+    password: form.value.password,
+    avatarUrl: avatarUrl.value
+  })
+
+  if (res.status === 200) {
+    alert('更新成功')
+
+    // ⭐ 核心：只改这一行
+    userStore.setUsername(form.value.username)
+  } else {
+    alert('更新失败')
+  }
 }
 </script>
 
+
 <template>
-<div class="form">
-  <div class="form-card">
-    <h1 class="title">用户中心</h1>
+  <div class="form">
+    <div class="form-card">
+      <h1 class="title">用户中心</h1>
+
+      <!-- 头像上传 -->
       <div class="avatar-row">
         <span class="avatar-label">头像</span>
-        <el-upload>
-          <el-avatar :icon="UserFilled" size="large" shape="square" />
+        <el-upload :on-change="handleAvatarUpload">
+          <el-avatar
+              :src="avatarUrl"
+              :icon="!avatarUrl ? UserFilled : undefined"
+              size="large"
+              shape="square"
+          />
         </el-upload>
       </div>
-    <el-form :model="form" label-width="auto" style="max-width: 300px">
-      <div class="form-item">
-        <el-form-item label="姓名">
-          <el-input v-model="form.name" />
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.password" />
-        </el-form-item>
-      </div>
-      <el-form-item class="form-button">
-        <el-button @click="onSubmit" size="large">确定</el-button>
-        <el-button size="large">取消</el-button>
-      </el-form-item>
-    </el-form>
 
+      <!-- 表单 -->
+      <el-form :model="form" label-width="auto" style="max-width: 300px">
+        <div class="form-item">
+          <el-form-item label="姓名">
+            <!-- v-model 绑定 computed username -->
+            <el-input v-model="form.username" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input type="password" v-model="form.password" />
+          </el-form-item>
+        </div>
+        <el-form-item class="form-button">
+          <el-button @click="onSubmit" size="large">确定</el-button>
+          <el-button size="large">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped>

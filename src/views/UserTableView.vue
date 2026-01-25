@@ -74,14 +74,16 @@ const deleteUser = async (row: any) => {
 }
 
 const changeUser = async () => {
-  if(form.value.id === null){
+  if(form.value.id === null) {
     const res = await addUserApi({
-      username:form.value.username,
-      password:form.value.password,
-      role:radio.value
+      username: form.value.username,
+      password: form.value.password,
+      role: radio.value
     })
     if (res.status === 200) {
       alert('添加成功')
+    }else if(form.value.password === ''){
+      alert('密码为空，添加失败')
     }else{
       alert('添加失败')
     }
@@ -203,6 +205,16 @@ onMounted(() => {
   margin: 20px auto;
 }
 
+/* =========================
+   el-table 行高
+========================= */
+:deep(.el-table__row) {
+  height: 57px;
+}
+
+/* =========================
+   分页
+========================= */
 .page{
   display: flex;
   justify-content: space-between;
@@ -210,10 +222,57 @@ onMounted(() => {
   margin-top: 30px;
 }
 
+/* ✅ input 外层布局 */
 .input{
   display: flex;
   margin-left: 85px;
   margin-top: 20px;
+}
+
+/* =========================
+   下拉选择器
+========================= */
+.el-dropdown{
+  display: flex;
+  margin-top: 20px;
+}
+
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: #ec4899;
+  background: #fdf2f8;
+  padding: 6px 12px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #fbcfe8;
+  transition: all .25s ease;
+}
+
+.example-showcase .el-dropdown-link:hover {
+  background: #ec4899;
+  color: #fff;
+}
+
+/* 下拉菜单项 */
+:deep(.el-dropdown-menu) {
+  background: #fff !important;
+  border-radius: 14px;
+  padding: 4px 0;
+  border: 1px solid #fbcfe8;
+}
+
+:deep(.el-dropdown-menu__item) {
+  color: #ec4899 !important;
+  background: #fff !important;
+  transition: all .25s ease;
+  padding: 8px 16px;
+}
+
+:deep(.el-dropdown-menu__item:hover),
+:deep(.el-dropdown-menu__item:focus) {
+  background: #ec4899 !important;
+  color: #fff !important;
 }
 
 /* =========================
@@ -236,6 +295,7 @@ button{
 button:hover{
   background: #ec4899;
   color: #fff;
+  border: 1px solid #ec4899;
 }
 
 button:focus,
@@ -254,6 +314,9 @@ span{
   margin-left:85px;
 }
 
+/* =========================
+   对话框恢复原有格式
+========================= */
 .dialog{
   display: flex;
   justify-content: center;
@@ -274,6 +337,73 @@ span{
 }
 
 /* =========================
+   对话框叉叉（粉色+灭蓝）
+========================= */
+:deep(.el-dialog__close){
+  color: #fbcfe8 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: color .2s ease, transform .15s ease;
+}
+
+:deep(.el-dialog__close svg),
+:deep(.el-dialog__close svg path){
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+:deep(.el-dialog__close:hover),
+:deep(.el-dialog__close:focus){
+  color: #ec4899 !important;
+  transform: scale(1.08);
+}
+
+:deep(.el-dialog__close:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   el-table
+========================= */
+:deep(.el-table){
+  background: #fdf2f8;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(236,72,153,0.1);
+}
+
+:deep(.el-table__header),
+:deep(.el-table__body-wrapper){
+  background: transparent;
+}
+
+:deep(.el-table th){
+  background: rgba(236,72,153,0.1);
+  color: #ec4899;
+  font-weight: 600;
+  text-align: center;
+}
+
+:deep(.el-table td){
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  text-align: center;
+  transition: all .25s ease;
+}
+
+:deep(.el-table tr:hover td){
+  background: rgba(236,72,153,0.08);
+}
+
+:deep(.el-table th),
+:deep(.el-table td){
+  border-color: #fbcfe8;
+}
+
+/* =========================
    el-input
 ========================= */
 :deep(.el-input__wrapper){
@@ -289,41 +419,41 @@ span{
 }
 
 /* =========================
-   🔥 radio（无延迟 · 灭蓝 · 正确优先级）
+   🔥 radio（彻底灭蓝 + 即时响应）
 ========================= */
-
-/* label：恢复正常字重 */
-:deep(.el-radio__label){
-  font-weight: 400 !important;
-  color: #111 !important;
-  transition: color .2s ease;
-}
-
-/* 初始圈：粉色空心 */
 :deep(.el-radio__inner){
   border-color: #fbcfe8 !important;
   background: #fff !important;
-  transition: all .2s ease;
+  transition: all .15s ease;
 }
 
-/* hover：圈仍是粉，字变粉（不影响 checked） */
+/* hover 时依旧粉色（不变蓝） */
 :deep(.el-radio:hover .el-radio__inner){
+  border-color: #ec4899 !important;
+  background: #fff !important;
+}
+
+/* 按下瞬间（active）立刻变粉 */
+:deep(.el-radio__input:active .el-radio__inner){
+  background-color: #ec4899 !important;
   border-color: #ec4899 !important;
 }
 
-:deep(.el-radio:hover .el-radio__label){
-  color: #ec4899 !important;
-}
-
-/* ✅ checked：最高优先级（立刻生效，无延迟） */
+/* 选中态（最高优先级） */
 :deep(.el-radio__input.is-checked .el-radio__inner){
   background-color: #ec4899 !important;
   border-color: #ec4899 !important;
 }
 
+/* label */
 :deep(.el-radio__input.is-checked + .el-radio__label){
   color: #ec4899 !important;
-  font-weight: 400 !important;
+}
+
+/* focus 灭蓝 */
+:deep(.el-radio__input.is-focus .el-radio__inner){
+  box-shadow: none !important;
+  border-color: #ec4899 !important;
 }
 
 /* =========================
@@ -350,7 +480,7 @@ span{
 }
 
 /* =========================
-   分页（整合为粉色渐变 hover 效果）
+   分页
 ========================= */
 :deep(.el-pagination){
   --el-pagination-bg-color: #fdf2f8;
@@ -405,6 +535,7 @@ span{
 :deep(.el-pagination__total){
   color: #fff !important;
 }
-
 </style>
+
+
 
