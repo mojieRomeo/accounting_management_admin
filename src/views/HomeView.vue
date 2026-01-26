@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { onMounted} from "vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -12,6 +13,7 @@ const currentRole = ref(Number(localStorage.getItem('role') || ''))
 ======================== */
 const logout = () => {
   localStorage.clear()
+  userStore.username = ''
   router.push('/login')
 }
 
@@ -36,6 +38,7 @@ const handleSideMove = (e: MouseEvent) => {
 const resetSide = () => {
   sideStyle.value = { transform: 'rotateX(0) rotateY(0)' }
 }
+
 </script>
 
 <template>

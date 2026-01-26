@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 const form = ref({
-  username: userStore.username, // ⭐ 初始值来自 pinia
+  username: userStore.username, // 初始值来自 pinia
   password: ''
 })
 
@@ -27,11 +27,15 @@ const onSubmit = async () => {
   if (res.status === 200) {
     alert('更新成功')
 
-    // ⭐ 核心：只改这一行
+    // 核心：只改这一行
     userStore.setUsername(form.value.username)
   } else {
     alert('更新失败')
   }
+}
+
+const goBack = () => {
+  window.history.back()
 }
 </script>
 
@@ -67,7 +71,7 @@ const onSubmit = async () => {
         </div>
         <el-form-item class="form-button">
           <el-button @click="onSubmit" size="large">确定</el-button>
-          <el-button size="large">取消</el-button>
+          <el-button size="large" @click="goBack">取消</el-button>
         </el-form-item>
       </el-form>
     </div>

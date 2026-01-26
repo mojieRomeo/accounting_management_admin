@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import { loginApi } from '@/api/loginApi'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const username = ref('')
 const password = ref('')
 const router = useRouter()
+const userStore = useUserStore()
 
 const cardStyle = ref({
   transform: 'rotateX(0deg) rotateY(0deg)'
@@ -47,6 +49,8 @@ const login = async () => {
     localStorage.setItem('role', res.data.role)
     localStorage.setItem('username', res.data.username)
     localStorage.setItem('id', res.data.id)
+    //⬇非常重要：为了防止退出登录后{{ userStore.username }}无法获取到用户名造成"Welcome Home,"情况，详细请看@/stores/user.ts
+    userStore.setUsername(res.data.username)
     router.push('/home')
   } else {
     alert(res.msg)
