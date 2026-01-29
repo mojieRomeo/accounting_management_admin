@@ -49,7 +49,8 @@ const login = async () => {
     localStorage.setItem('role', res.data.role)
     localStorage.setItem('username', res.data.username)
     localStorage.setItem('id', res.data.id)
-    //⬇非常重要：为了防止退出登录后{{ userStore.username }}无法获取到用户名造成"Welcome Home,"情况，详细请看@/stores/user.ts
+    // 为了防止退出登录后{{ userStore.username }}无法获取到用户名造成"Welcome Home,"情况，详细请看@/stores/user.ts
+    // 注意：可以说只有第一次{{ userStore.username }}是通过localStorage获取的，后面都是通过userStore.setUsername获取的
     userStore.setUsername(res.data.username)
     router.push('/home')
   } else {

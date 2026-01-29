@@ -1,6 +1,5 @@
 import axios from "axios";
-
-export const updateUserInfoApi = async (data: any) => {
+export const updateUserInfoApi = async (data: FormData) => {
     try {
         const res = await axios.post('/api/user/updateUserInfo', data);
         return res.data

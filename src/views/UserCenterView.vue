@@ -12,17 +12,23 @@ const form = ref({
 })
 
 const avatarUrl = ref('')
+const avatarFile = ref<File | null>(null)
 
 const handleAvatarUpload = (file: any) => {
+  // file.raw 就是上传的文件，avatarFile是Multpartfile类型
+  avatarFile.value = file.raw
   avatarUrl.value = URL.createObjectURL(file.raw)
 }
 
 const onSubmit = async () => {
-  const res = await updateUserInfoApi({
-    username: form.value.username,
-    password: form.value.password,
-    avatarUrl: avatarUrl.value
-  })
+  //FormData是专门用来装Multpartfile数据类型的，为了方便传参因此把username，password一起append进去
+  const formData = new FormData()
+  formData.append('username', form.value.username)
+  formData.append('password', form.value.password)
+  if(avatarFile.value){
+    formData.append('avatar', avatarFile.value)
+  }
+  const res = await updateUserInfoApi(formData)
 
   if (res.status === 200) {
     alert('更新成功')
@@ -48,7 +54,8 @@ const goBack = () => {
       <!-- 头像上传 -->
       <div class="avatar-row">
         <span class="avatar-label">头像</span>
-        <el-upload :on-change="handleAvatarUpload">
+        <!--:auto-upload="false" :show-file-list="false"是防止选取头像后立刻 POST 当前页面地址http://localhost:5173/home/center-->
+        <el-upload :auto-upload="false" :show-file-list="false" :on-change="handleAvatarUpload">
           <el-avatar
               :src="avatarUrl"
               :icon="!avatarUrl ? UserFilled : undefined"
