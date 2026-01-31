@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import {computed, ref} from "vue"
 import { UserFilled } from '@element-plus/icons-vue'
 import { updateUserInfoApi } from "@/api/updateUserInfoApi"
 import { useUserStore } from '@/stores/user'
@@ -11,14 +11,20 @@ const form = ref({
   password: ''
 })
 
-const avatarUrl = ref('')
+const tempAvatarUrl = ref('')
 const avatarFile = ref<File | null>(null)
+const avatarUrl = ref('')
 
 const handleAvatarUpload = (file: any) => {
   // file.raw 就是上传的文件，avatarFile是Multpartfile类型
   avatarFile.value = file.raw
-  avatarUrl.value = URL.createObjectURL(file.raw)
+  tempAvatarUrl.value = URL.createObjectURL(file.raw)
 }
+
+  // 必须有computed，否则头像不会依据tempAvatarUrl和userStore.avatar的变化响应式更新
+const displayAvatar = computed(() => {
+  return tempAvatarUrl.value || userStore.avatar
+})
 
 const onSubmit = async () => {
   //FormData是专门用来装Multpartfile数据类型的，为了方便传参因此把username，password一起append进去
@@ -29,12 +35,14 @@ const onSubmit = async () => {
     formData.append('avatar', avatarFile.value)
   }
   const res = await updateUserInfoApi(formData)
+  avatarUrl.value = res.msg
 
   if (res.status === 200) {
     alert('更新成功')
 
     // 核心：只改这一行
     userStore.setUsername(form.value.username)
+    userStore.setAvatar(avatarUrl.value)
   } else {
     alert('更新失败')
   }
@@ -57,8 +65,8 @@ const goBack = () => {
         <!--:auto-upload="false" :show-file-list="false"是防止选取头像后立刻 POST 当前页面地址http://localhost:5173/home/center-->
         <el-upload :auto-upload="false" :show-file-list="false" :on-change="handleAvatarUpload">
           <el-avatar
-              :src="avatarUrl"
-              :icon="!avatarUrl ? UserFilled : undefined"
+              :src="displayAvatar"
+              :icon="!displayAvatar ? UserFilled : undefined"
               size="large"
               shape="square"
           />

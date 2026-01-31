@@ -2,18 +2,22 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { onMounted} from "vue";
+import {UserFilled} from "@element-plus/icons-vue";
 
 const router = useRouter()
 const userStore = useUserStore()
 const currentRole = ref(Number(localStorage.getItem('role') || ''))
 
 /* ========================
-   路由
+   用了pinia的logout三件套
 ======================== */
 const logout = () => {
+  // 清除本地存储
   localStorage.clear()
+  // 清除pinia内存态（关键）
   userStore.username = ''
+  userStore.avatar = ''
+  //跳转
   router.push('/login')
 }
 
@@ -50,6 +54,12 @@ const resetSide = () => {
       <h2 class="context" @click="goToCenter">
         Welcome&nbsp;Home,&nbsp;{{ userStore.username }}
       </h2>
+      <el-avatar
+          :src="userStore.avatar"
+          :icon="!userStore.avatar ? UserFilled : undefined"
+          size="large"
+          shape="square"
+      />
 
       <button class="logout-btn" @click="logout">退出</button>
     </header>
