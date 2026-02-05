@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 const form = ref({
-  username: userStore.username, // 初始值来自 pinia
+  username: userStore.username,
   password: ''
 })
 
@@ -16,22 +16,19 @@ const avatarFile = ref<File | null>(null)
 const avatarUrl = ref('')
 
 const handleAvatarUpload = (file: any) => {
-  // file.raw 就是上传的文件，avatarFile是Multpartfile类型
   avatarFile.value = file.raw
   tempAvatarUrl.value = URL.createObjectURL(file.raw)
 }
 
-  // 必须有computed，否则头像不会依据tempAvatarUrl和userStore.avatar的变化响应式更新
 const displayAvatar = computed(() => {
   return tempAvatarUrl.value || userStore.avatar
 })
 
 const onSubmit = async () => {
-  //FormData是专门用来装Multpartfile数据类型的，为了方便传参因此把username，password一起append进去
   const formData = new FormData()
   formData.append('username', form.value.username)
   formData.append('password', form.value.password)
-  if(avatarFile.value){
+  if (avatarFile.value) {
     formData.append('avatar', avatarFile.value)
   }
   const res = await updateUserInfoApi(formData)
@@ -39,8 +36,6 @@ const onSubmit = async () => {
 
   if (res.status === 200) {
     alert('更新成功')
-
-    // 核心：只改这一行
     userStore.setUsername(form.value.username)
     userStore.setAvatar(avatarUrl.value)
   } else {
@@ -53,16 +48,13 @@ const goBack = () => {
 }
 </script>
 
-
 <template>
   <div class="form">
     <div class="form-card">
       <h1 class="title">用户中心</h1>
 
-      <!-- 头像上传 -->
       <div class="avatar-row">
         <span class="avatar-label">头像</span>
-        <!--:auto-upload="false" :show-file-list="false"是防止选取头像后立刻 POST 当前页面地址http://localhost:5173/home/center-->
         <el-upload :auto-upload="false" :show-file-list="false" :on-change="handleAvatarUpload">
           <el-avatar
               :src="displayAvatar"
@@ -73,11 +65,9 @@ const goBack = () => {
         </el-upload>
       </div>
 
-      <!-- 表单 -->
       <el-form :model="form" label-width="auto" style="max-width: 300px">
         <div class="form-item">
           <el-form-item label="姓名">
-            <!-- v-model 绑定 computed username -->
             <el-input v-model="form.username" />
           </el-form-item>
           <el-form-item label="密码">
@@ -91,13 +81,25 @@ const goBack = () => {
       </el-form>
     </div>
   </div>
+
+  <!-- ✅ 新增：人物装饰（不影响任何布局） -->
+  <img
+      src="@/assets/images/downloaded-image-2.jpg"
+      alt="character"
+      class="character"
+      style="width: 30%"
+  />
 </template>
 
 <style scoped>
 .form {
   width: 90%;
-  margin-left: 85px;
-  margin-top: 20px;
+  max-width: 420px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* 卡片 */
@@ -113,15 +115,14 @@ const goBack = () => {
   align-items: center;
 }
 
-/* 标题 */
 .title {
-  margin-bottom: 24px;
-  font-size: 20px;
+  margin-bottom: 72px;
+  font-size: 24px;
   font-weight: 600;
   text-align: center;
+  color: #f472b6;
 }
 
-/* 头像行 */
 .avatar-row {
   display: flex;
   align-items: center;
@@ -134,20 +135,84 @@ const goBack = () => {
   color: #606266;
 }
 
-/* 表单项区域 */
 .form-item {
   width: 300px;
 }
 
-/* ===== 关键：按钮间距真正生效的地方 ===== */
 .form-button :deep(.el-form-item__content) {
   display: flex;
   justify-content: center;
-  gap: 20px;   /* 改这里，按钮间距一定生效 */
+  gap: 20px;
 }
 
-button:hover {
-  background-color: #666; /* 悬停时背景颜色 */
-  color: #fff; /* 悬停时文字颜色 */
+/* 输入框 */
+:deep(.el-input__wrapper) {
+  background: #f3f4f6;
+  border-radius: 14px;
+  border: none;
+  box-shadow: none !important;
+  transition: all 0.25s ease;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.25) !important;
+}
+
+:deep(.el-input__inner),
+:deep(.el-input__inner:focus) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 按钮 */
+button,
+:deep(.el-button) {
+  background: #fdf2f8;
+  color: #ec4899;
+  border: 1px solid #fbcfe8;
+  border-radius: 999px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  outline: none;
+  box-shadow: none !important;
+}
+
+button:hover,
+:deep(.el-button:hover) {
+  background: #ec4899;
+  color: #fff;
+  border-color: #ec4899;
+}
+
+/* =========================
+   ✅ 人物 PNG 装饰
+   不影响布局，仅视觉填充
+========================= */
+.character {
+  position: fixed;
+  right: 8%;
+  bottom: 6%;
+  width: 320px;
+  pointer-events: none; /* 不影响点击 */
+  user-select: none;
+  opacity: 0.95;
+}
+.character {
+  position: absolute;        /* 跟随页面滚动，不突兀 */
+  right: -14vw;
+  bottom: -10vh;
+
+  width: 25vw;               /* ≈ 屏幕 1/4 */
+  max-width: 960px;
+  min-width: 620px;
+
+  transform: scaleX(-1);     /* 朝向翻转：右 → 左 */
+  opacity: 1;                /* 人物不透明度 */
+
+  pointer-events: none;
+  user-select: none;
 }
 </style>
